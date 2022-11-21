@@ -103,7 +103,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
             PackageLicenseInfo {
                 id: p.id,
                 name: p.name,
-                repository: p.repository.unwrap(),
+                repository: p.repository,
                 license_id: p.license.unwrap(),
                 license_files: manifest_dir
                     .read_dir()
@@ -131,8 +131,10 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
         name.as_ref(),
         root_pkg.license_id
     )?;
-    writeln!(out, "and is hosted on {}.", root_pkg.repository)?;
-    writeln!(out, "")?;
+    if let Some(repo) = &root_pkg.repository {
+        writeln!(out, "and is hosted on {}", repo)?;
+    }
+    writeln!(out, ".")?;
     print_license_list(out, "software", &root_pkg)?;
     for p in packages {
         let separator = "-".repeat(p.name.len() + (4 + 1) * 2);
@@ -145,8 +147,10 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
             "This software uses {} which is released under license of {}",
             p.name, p.license_id
         )?;
-        writeln!(out, "which is hosted on {}.", p.repository)?;
-        writeln!(out, "")?;
+        if let Some(repo) = &p.repository {
+            writeln!(out, "and is hosted on {}", repo)?;
+        }
+        writeln!(out, ".")?;
         print_license_list(out, "library", &p)?;
     }
     Ok(())
@@ -186,7 +190,7 @@ fn print_license_list<W: WriteFmt>(
 struct PackageLicenseInfo {
     id: PackageId,
     name: String,
-    repository: String,
+    repository: Option<String>,
     license_id: String,
     license_files: Vec<PathBuf>,
 }
