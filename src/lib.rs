@@ -138,7 +138,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
         writeln!(out, " complicated license below")?;
     }
     if let Some(repo) = &root_pkg.repository {
-        writeln!(out, " and is hosted on {}", repo)?;
+        write!(out, "  and is hosted on {}", repo)?;
     }
     writeln!(out, ".")?;
     print_license_list(out, "software", &root_pkg)?;
@@ -159,7 +159,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
             writeln!(out, " complicated license below")?;
         }
         if let Some(repo) = &p.repository {
-            writeln!(out, " and is hosted on {}", repo)?;
+            write!(out, "  and is hosted on {}", repo)?;
         }
         writeln!(out, ".")?;
         print_license_list(out, "library", &p)?;
