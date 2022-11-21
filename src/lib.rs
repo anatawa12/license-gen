@@ -108,6 +108,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
                 license_files: manifest_dir
                     .read_dir()
                     .expect("reading manifest dir")
+                    .filter_ok(|e| e.file_type().map(|x| x.is_file()).unwrap_or(false))
                     .filter_ok(|e| {
                         e.file_name()
                             .to_string_lossy()
