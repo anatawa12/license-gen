@@ -110,12 +110,12 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
                     .expect("reading manifest dir")
                     .filter_ok(|e| e.file_type().map(|x| x.is_file()).unwrap_or(false))
                     .filter_ok(|e| {
-                        let lowercase = e.file_name()
+                        let lowercase = e
+                            .file_name()
                             .to_string_lossy()
                             .as_ref()
                             .to_ascii_lowercase();
-                        lowercase.contains("license")
-                            || lowercase == "notice" // apache license's NOTICE file
+                        lowercase.contains("license") || lowercase == "notice" // apache license's NOTICE file
                     })
                     .map_ok(|e| e.path())
                     .collect::<Result<Vec<_>, _>>()
@@ -127,11 +127,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
     let root_pkg = packages.swap_remove(packages.iter().position(|x| x.id == root_id).unwrap());
     packages.sort_by_key(|x| x.id.clone());
 
-    write!(
-        out,
-        "This software {} is published under",
-        name.as_ref()
-    )?;
+    write!(out, "This software {} is published under", name.as_ref())?;
     if let Some(license) = &root_pkg.license_id {
         writeln!(out, " license of {}", license)?;
     } else {
@@ -148,11 +144,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
         writeln!(out, "---- {} ----", p.name)?;
         writeln!(out, "{}", separator)?;
         writeln!(out, "")?;
-        write!(
-            out,
-            "This software uses {} which is released under",
-            p.name
-        )?;
+        write!(out, "This software uses {} which is released under", p.name)?;
         if let Some(license) = &p.license_id {
             writeln!(out, " license of {}", license)?;
         } else {
