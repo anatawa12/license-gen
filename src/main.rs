@@ -22,8 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-mod lib;
-pub use lib::*;
+use license_gen::*;
 
 fn main() {
     Builder::new()
