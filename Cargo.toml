@@ -1,10 +1,10 @@
 [package]
 name = "license-gen"
 license = "MIT"
-version.workspace = true
-authors.workspace = true
-edition.workspace = true
-repository.workspace = true
+version = "0.1.0"
+authors = ["anatawa12"]
+repository = "https://github.com/anatawa12/license-gen"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
