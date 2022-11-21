@@ -127,7 +127,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
     let root_pkg = packages.swap_remove(packages.iter().position(|x| x.id == root_id).unwrap());
     packages.sort_by_key(|x| x.id.clone());
 
-    writeln!(
+    write!(
         out,
         "This software {} is published under",
         name.as_ref()
@@ -148,7 +148,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
         writeln!(out, "---- {} ----", p.name)?;
         writeln!(out, "{}", separator)?;
         writeln!(out, "")?;
-        writeln!(
+        write!(
             out,
             "This software uses {} which is released under",
             p.name
