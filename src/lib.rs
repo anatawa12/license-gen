@@ -1,4 +1,4 @@
-// VRC Log Renamer / license gen: an utility to generate license list file
+// license gen: an utility to generate license list file
 //
 // MIT License
 //
