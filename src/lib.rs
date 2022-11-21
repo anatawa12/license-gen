@@ -104,7 +104,7 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
                 id: p.id,
                 name: p.name,
                 repository: p.repository,
-                license_id: p.license.unwrap(),
+                license_id: p.license,
                 license_files: manifest_dir
                     .read_dir()
                     .expect("reading manifest dir")
@@ -127,12 +127,16 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
 
     writeln!(
         out,
-        "This software {} is published under license of {}",
-        name.as_ref(),
-        root_pkg.license_id
+        "This software {} is published under",
+        name.as_ref()
     )?;
+    if let Some(license) = &root_pkg.license_id {
+        writeln!(out, " license of {}", license)?;
+    } else {
+        writeln!(out, " complicated license below")?;
+    }
     if let Some(repo) = &root_pkg.repository {
-        writeln!(out, "and is hosted on {}", repo)?;
+        writeln!(out, " and is hosted on {}", repo)?;
     }
     writeln!(out, ".")?;
     print_license_list(out, "software", &root_pkg)?;
@@ -144,11 +148,16 @@ fn generate<W: WriteFmt>(out: &mut W, name: impl AsRef<str>) -> Result<(), W::Er
         writeln!(out, "")?;
         writeln!(
             out,
-            "This software uses {} which is released under license of {}",
-            p.name, p.license_id
+            "This software uses {} which is released under",
+            p.name
         )?;
+        if let Some(license) = &p.license_id {
+            writeln!(out, " license of {}", license)?;
+        } else {
+            writeln!(out, " complicated license below")?;
+        }
         if let Some(repo) = &p.repository {
-            writeln!(out, "and is hosted on {}", repo)?;
+            writeln!(out, " and is hosted on {}", repo)?;
         }
         writeln!(out, ".")?;
         print_license_list(out, "library", &p)?;
@@ -191,6 +200,6 @@ struct PackageLicenseInfo {
     id: PackageId,
     name: String,
     repository: Option<String>,
-    license_id: String,
+    license_id: Option<String>,
     license_files: Vec<PathBuf>,
 }
